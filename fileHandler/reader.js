@@ -9,7 +9,7 @@ module.exports = (fileName, errorCallback) =>
     return data;
   });
 
-// TODO: Utilizar Lazy loading
+// TODO: Use lazy loading
 /* async function formaterObjectsLazy(jsonList) {
   for (const element of ) {
     console.log(element);

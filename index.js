@@ -1,13 +1,27 @@
-const reader = require("./file_handler/reader");
-const interface = require("./reports_handler/interface");
+const reader = require("./fileHandler/reader");
+const reportsinterface = require("./reportsHandler/interface");
+const { prompt } = require("inquirer");
+const fs = require("fs");
 
-// Quero catalogar minhas licenças (Pode demorar um pouco)
-// Quero fazer relatorio do meu catalogo de licenças ... na pasta:
-
-(async () => {
-  const licences = await reader("./data/extracted_license.json", (err) => {
+const read = (filePath) =>
+  reader(filePath, (err) => {
     console.log(err);
-  }).then((jsonList) => JSON.parse(jsonList));
+  }).then((jonsonLicenses) => JSON.parse(jonsonLicenses));
 
-  interface(licences);
+(() => {
+  const question = {
+    type: "input",
+    name: "filePath",
+    message: "Analyze file ./",
+    async validate(fileName) {
+      // TODO: Improve this logic
+      if (!fileName?.includes(".json")) return "Only JSON files for now";
+      return fs.existsSync(fileName) || `File "${fileName}" not found`;
+    },
+  };
+
+  prompt([question]).then(async ({ filePath }) => {
+    const licenses = await read(filePath);
+    reportsinterface(licenses);
+  });
 })();
