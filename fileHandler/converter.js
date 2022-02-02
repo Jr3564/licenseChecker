@@ -21,3 +21,18 @@ exports.csvToObject = (licensesCSV) => {
 };
 
 exports.jsonToObject = (licensesJson) => JSON.parse(licensesJson);
+
+// TODO: Improve this logic
+exports.objectToCSV = (licences) => {
+  const keys = Object.keys(licences[0]);
+  const linesColumns = licences.reduce(
+    (acc, crr) => {
+      return [...acc, [...keys.map((key) => crr[key])]];
+    },
+    [keys]
+  );
+  return linesColumns.map((line) => {
+    const values = line.map((value) => `"${value}"`);
+    return values.join(",") + "\n";
+  });
+};

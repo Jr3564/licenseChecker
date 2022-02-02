@@ -1,6 +1,7 @@
 const { prompt } = require("inquirer");
 const service = require("../reportHandlerServices");
-const jsonWriter = require("../../fileHandler/jsonWriter");
+const writer = require("../../fileHandler/writer");
+const { objectToCSV } = require("../../fileHandler/converter");
 
 // FIXME: CHECK EMPTY FILE
 const option_1 = (licenses, callback = () => {}) => {
@@ -32,12 +33,21 @@ const option_3 = (licenses, callback = () => {}) => {
     type: "input",
     name: "filePath",
     message: "Export file to ./",
+    async validate(filePath) {
+      // TODO: logic repeats itself
+      if (!filePath?.includes(".json") && !filePath?.includes(".csv"))
+        return "Add file extension";
+      return true;
+    },
+    filter: (answer) => answer.trim(),
   };
   option_2(licenses, async (filtredLicenses) => {
     prompt([question]).then(async ({ filePath }) => {
-      const jsonFiltredLicenses = JSON.stringify(filtredLicenses, "", 2);
+      const licenses = filePath.includes(".csv")
+        ? objectToCSV(filtredLicenses)
+        : JSON.stringify(filtredLicenses, "", 2);
 
-      await jsonWriter(jsonFiltredLicenses, filePath, (err) => {
+      await writer(licenses, filePath, (err) => {
         console.log(err);
       });
 

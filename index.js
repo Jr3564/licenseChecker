@@ -12,11 +12,11 @@ const fs = require("fs");
       type: "input",
       name: "filePath",
       message: "Analyze file ./",
-      async validate(fileName) {
+      async validate(filePath) {
         // TODO: Improve this logic
-        if (!fileName?.includes(".json") && !fileName?.includes(".csv"))
+        if (!filePath?.includes(".json") && !filePath?.includes(".csv"))
           return "Add file extension";
-        return fs.existsSync(fileName) || `File "${fileName}" not found`;
+        return fs.existsSync(filePath) || `File "${filePath}" not found`;
       },
       filter: (answer) => answer.trim(),
     },
