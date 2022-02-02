@@ -3,13 +3,11 @@ const service = require("../reportHandlerServices");
 const writer = require("../../fileHandler/writer");
 const { objectToCSV } = require("../../fileHandler/converter");
 
-// FIXME: CHECK EMPTY FILE
 const option_1 = (licenses, callback = () => {}) => {
   const licenceAmounts = service.getLicensesAmountIn(licenses);
   callback(licenceAmounts);
 };
 
-// FIXME: CHECK EMPTY FILE
 const option_2 = (licenses, callback = () => {}) => {
   const licenceTypes = service.getLicensesTypesIn(licenses);
 
@@ -32,7 +30,7 @@ const option_3 = (licenses, callback = () => {}) => {
   const question = {
     type: "input",
     name: "filePath",
-    message: "Export file to ./",
+    message: "If the file exists it will be replaced\nExport file to ./",
     async validate(filePath) {
       // TODO: logic repeats itself
       if (!filePath?.includes(".json") && !filePath?.includes(".csv"))
