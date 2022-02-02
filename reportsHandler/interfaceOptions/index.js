@@ -2,6 +2,7 @@ const { prompt } = require("inquirer");
 const service = require("../reportHandlerServices");
 const writer = require("../../fileHandler/writer");
 const { objectToCSV } = require("../../fileHandler/converter");
+const { validToWrite: validate } = require("../reportValidation");
 
 const option_1 = (licenses, callback = () => {}) => {
   const licenceAmounts = service.getLicensesAmountIn(licenses);
@@ -30,13 +31,8 @@ const option_3 = (licenses, callback = () => {}) => {
   const question = {
     type: "input",
     name: "filePath",
-    message: "If the file exists it will be replaced\nExport file to ./",
-    async validate(filePath) {
-      // TODO: logic repeats itself
-      if (!filePath?.includes(".json") && !filePath?.includes(".csv"))
-        return "Add file extension";
-      return true;
-    },
+    message: "If the file exists it will be replaced\n" + "Export file to ./",
+    validate,
     filter: (answer) => answer.trim(),
   };
   option_2(licenses, async (filtredLicenses) => {
