@@ -22,23 +22,18 @@ module.exports = (licenses) => {
   const questions = generateQuestions(choices);
 
   prompt(questions).then(({ choice }) => {
+    const printResult = (result) => console.log(result);
     switch (choice) {
       case choices.option_1:
-        options.option_1(licenses, (licenceAmounts) => {
-          console.log(licenceAmounts);
-        });
+        options.option_1(licenses, printResult);
         break;
 
       case choices.option_2:
-        options.option_2(licenses, (filtredLicenses) => {
-          console.log(filtredLicenses);
-        });
+        options.option_2(licenses, printResult);
         break;
 
       case choices.option_3:
-        options.option_3(licenses, (result) => {
-          console.log(result);
-        });
+        options.option_3(licenses, printResult);
         break;
     }
   });

@@ -4,12 +4,13 @@ const writer = require("../../fileHandler/writer");
 const { objectToCSV } = require("../../fileHandler/converter");
 const { validToWrite: validate } = require("../reportValidation");
 
-const option_1 = (licenses, callback = () => {}) => {
+const defaultCallback = () => {};
+const option_1 = (licenses, callback = defaultCallback) => {
   const licenceAmounts = service.getLicensesAmountIn(licenses);
   callback(licenceAmounts);
 };
 
-const option_2 = (licenses, callback = () => {}) => {
+const option_2 = (licenses, callback = defaultCallback) => {
   const licenceTypes = service.getLicensesTypesIn(licenses);
 
   const question = [
@@ -27,7 +28,7 @@ const option_2 = (licenses, callback = () => {}) => {
   });
 };
 
-const option_3 = (licenses, callback = () => {}) => {
+const option_3 = (licenses, callback = defaultCallback) => {
   const question = {
     type: "input",
     name: "filePath",
@@ -35,6 +36,7 @@ const option_3 = (licenses, callback = () => {}) => {
     validate,
     filter: (answer) => answer.trim(),
   };
+
   option_2(licenses, async (filtredLicenses) => {
     prompt([question]).then(async ({ filePath }) => {
       const licenses = filePath.includes(".csv")
