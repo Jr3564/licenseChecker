@@ -36,8 +36,8 @@ exports.option_3 = (dependencies, callback) => {
   });
 };
 
-exports.option_4 = async (licenses, callback) => {
-  const licenceTypes = service.getLicensesTypesIn(licenses);
+exports.option_4 = async (dependencies, callback) => {
+  const licenceTypes = service.getLicensesTypesIn(dependencies);
 
   const mappedLicenses = await service.getAndMapLicensesByType(licenceTypes);
 
@@ -45,18 +45,44 @@ exports.option_4 = async (licenses, callback) => {
 };
 
 exports.option_5 = async (dependencies, callback) => {
-  const licenceTypes = service.getLicensesTypesIn(dependencies);
-
-  const mappedLicenses = await service.getAndMapLicensesByType(licenceTypes);
-
-  const dependenciesWithLicenses = dependencies.map((dependency) => ({
-    ...dependency,
-    permissions: mappedLicenses[dependency.license.toLowerCase()],
-  }));
+  const dependenciesWithLicenses = await service.getDependenciesWithPermissions(
+    dependencies
+  );
 
   prompts.typeFilePathToExportionPrompt(["json"], async (filePath) => {
     await writer.convertAndWrite(dependenciesWithLicenses, filePath);
 
     callback(`Saved in ${__dirname}/${filePath}`);
   });
+};
+
+const getPermissionListOf = (dependencies) => {
+  return new Set(
+    dependencies.reduce((acc, dependency) => {
+      if (!dependency?.permissions) return acc;
+      return [...acc, ...dependency.permissions];
+    }, [])
+  );
+};
+
+exports.option_6 = async (dependencies, callback) => {
+  const dependenciesWithLicenses = await service.getDependenciesWithPermissions(
+    dependencies
+  );
+
+  const result = dependenciesWithLicenses.reduce(
+    (acc, { name, license, linkUrl, permissions }) => {
+      const licensePermissions = new Set(permissions);
+      const permissionKeys = [...getPermissionListOf(dependencies)].reduce(
+        (acc, permissionKey) => ({
+          ...acc,
+          [permissionKey]: licensePermissions.has(permissionKey),
+        }),
+        {}
+      );
+      return { ...acc, [name]: { license, ...permissionKeys, linkUrl } };
+    },
+    {}
+  );
+  callback(result);
 };

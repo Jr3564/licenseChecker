@@ -10,14 +10,15 @@ prompts.typeFilePathToReadingPrompt(["json", "csv"], async (filePath) => {
     ? csvToObject(dependenciesInputed)
     : jsonToObject(dependenciesInputed);
 
+  const fetchMessage =
+    "(A request will be made for each license type in dependencies)";
   const choices = {
     option_1: "List number of dependencies by license type",
     option_2: "List dependencies by license type",
     option_3: "Export dependencies by license type",
-    option_4:
-      "Get licenses and permissions." +
-      "(A request will be made for each license type in dependencies)",
-    option_5: "List dependencies permissions",
+    option_4: "Get licenses and permissions." + fetchMessage,
+    option_5: "Export detailed dependencies with permissions" + fetchMessage,
+    option_6: "Print table of dependencies and license status" + fetchMessage,
   };
 
   prompts.choiceOneOptionPrompt(choices, async (choice) => {
@@ -37,6 +38,11 @@ prompts.typeFilePathToReadingPrompt(["json", "csv"], async (filePath) => {
         break;
       case choices.option_5:
         await options.option_5(dependencies, printResult);
+        break;
+      case choices.option_6:
+        await options.option_6(dependencies, (result) => {
+          console.table(result);
+        });
         break;
     }
   });
