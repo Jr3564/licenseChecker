@@ -14,7 +14,7 @@ const convertAndWrite = (data, filePath, errorCallback) => {
     ? objectToCSV(data)
     : JSON.stringify(data, "", 2);
 
-  return writer(convertedDependencies, filePath, errorCallback);
+  return write(convertedDependencies, filePath, errorCallback);
 };
 
 module.exports = { write, convertAndWrite };

@@ -1,3 +1,4 @@
+const axios = require("axios");
 exports.getLicensesAmountIn = (licensesList) => {
   return licensesList.reduce((licenses, { license }) => {
     if (licenses.hasOwnProperty(license)) {
