@@ -1,5 +1,8 @@
 const fs = require("fs").promises;
 
-module.exports = (text, filePath, errorCallback) => {
+const defaultCallback = (err) => {
+  console.log(err);
+};
+module.exports = (text, filePath, errorCallback = defaultCallback) => {
   return fs.writeFile(filePath, text, { flag: "w" }, errorCallback);
 };

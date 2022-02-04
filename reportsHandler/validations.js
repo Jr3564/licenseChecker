@@ -1,6 +1,6 @@
 const fs = require("fs");
 const reader = require("../fileHandler/reader");
-const errors = require("./reportValidationErros");
+const errors = require("./validationErros");
 
 const isAValidExtension = (filePath, extensions) => {
   const [, filePathExtension] = filePath.split(".");
@@ -11,7 +11,9 @@ const isAValidExtension = (filePath, extensions) => {
     return true;
   }
 
-  throw new errors.ExtensionNotSupportedError();
+  throw new errors.ExtensionNotSupportedError(
+    `This file extension is not supported. Only ${extensions.join(" or ")}`
+  );
 };
 
 const fileExists = (filePath) => {
@@ -34,11 +36,11 @@ const typedExit = (filePath) => {
   }
 };
 
-exports.validToRead = async (filePath) => {
+exports.validToRead = async (filePath, extensions) => {
   typedExit(filePath);
 
   try {
-    isAValidExtension(filePath, ["csv", "json"]);
+    isAValidExtension(filePath, extensions);
     fileExists(filePath);
     await fileIsNotEmpty(filePath);
   } catch ({ message }) {
@@ -48,11 +50,11 @@ exports.validToRead = async (filePath) => {
   return true;
 };
 
-exports.validToWrite = async (filePath) => {
+exports.validToWrite = async (filePath, extensions = ["csv", "json"]) => {
   typedExit(filePath);
 
   try {
-    isAValidExtension(filePath, ["csv", "json"]);
+    isAValidExtension(filePath, extensions);
   } catch ({ message }) {
     return message;
   }
