@@ -60,3 +60,25 @@ exports.choiceOneOptionPrompt = (choices, callback) => {
     callback(choice);
   });
 };
+
+exports.choiceToSaveBooleanOptionPrompt = (callback) => {
+  const questions = [
+    {
+      type: "confirm",
+      name: "doSave",
+      message: "Do you want to save?",
+      default: false,
+    },
+  ];
+
+  prompt(questions).then(({ doSave }) => {
+    callback(doSave);
+  });
+};
+
+/* // want to save
+prompts.typeFilePathToExportionPrompt(["json"], async (filePath) => {
+  await writer.convertAndWrite(result, filePath);
+
+  callback(`Saved in ${__dirname}/${filePath}`);
+}); */

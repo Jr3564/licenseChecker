@@ -28,7 +28,7 @@ exports.option_3 = (dependencies, callback) => {
       dependencies
     );
 
-    prompts.typeFilePathToExportionPrompt(["json", "csv"], async (filePath) => {
+    prompts.typeFilePathToExportionPrompt(["json"], async (filePath) => {
       await writer.convertAndWrite(filtredDependencies, filePath);
 
       callback(`Saved in ${__dirname}/${filePath}`);
@@ -56,33 +56,37 @@ exports.option_5 = async (dependencies, callback) => {
   });
 };
 
-const getPermissionListOf = (dependencies) => {
-  return new Set(
-    dependencies.reduce((acc, dependency) => {
-      if (!dependency?.permissions) return acc;
-      return [...acc, ...dependency.permissions];
-    }, [])
-  );
-};
-
 exports.option_6 = async (dependencies, callback) => {
   const dependenciesWithLicenses = await service.getDependenciesWithPermissions(
     dependencies
   );
 
-  const result = dependenciesWithLicenses.reduce(
-    (acc, { name, license, linkUrl, permissions }) => {
-      const licensePermissions = new Set(permissions);
-      const permissionKeys = [...getPermissionListOf(dependencies)].reduce(
-        (acc, permissionKey) => ({
-          ...acc,
-          [permissionKey]: licensePermissions.has(permissionKey),
-        }),
-        {}
-      );
-      return { ...acc, [name]: { license, ...permissionKeys, linkUrl } };
-    },
-    {}
+  //
+  ["permissions", "conditions", "limitations"].forEach((key) => {
+    service.mapArrayValeusOf(key, dependenciesWithLicenses);
+  });
+
+  // logic made for print only
+  const dependenciesWithLicensesToPrint = dependenciesWithLicenses.map(
+    (dependency) => ({
+      name: dependency["name"],
+      license: dependency["license"],
+      ...Object.entries(dependency).reduce((acc, [key, value]) => {
+        if (key.includes("Permissions")) return { ...acc, [key]: value };
+        return acc;
+      }, {}),
+    })
   );
-  callback(result);
+
+  callback(dependenciesWithLicensesToPrint);
+
+  prompts.choiceToSaveBooleanOptionPrompt((saveReport) => {
+    if (saveReport) {
+      prompts.typeFilePathToExportionPrompt(["csv"], async (filePath) => {
+        await writer.convertAndWrite(dependenciesWithLicenses, filePath);
+
+        console.log(`Saved in ${__dirname}/${filePath}`);
+      });
+    }
+  });
 };

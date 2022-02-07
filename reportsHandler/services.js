@@ -1,24 +1,25 @@
 const axios = require("axios");
-const getLicensesAmountIn = (licensesList) => {
-  return licensesList.reduce((licenses, { license }) => {
-    if (licenses.hasOwnProperty(license)) {
-      licenses[license] += 1;
+const converter = require("../fileHandler/converter");
+const getLicensesAmountIn = (dependencies) => {
+  return dependencies.reduce((dependency, { license }) => {
+    if (dependency.hasOwnProperty(license)) {
+      dependency[license] += 1;
     } else {
-      licenses[license] = 1;
+      dependency[license] = 1;
     }
-    return licenses;
+    return dependency;
   }, {});
 };
 
-const getLicensesTypesIn = (licensesList) => {
-  return licensesList.reduce((licenses, { license }) => {
-    if (licenses.includes(license)) return licenses;
-    return [...licenses, license];
+const getLicensesTypesIn = (dependencies) => {
+  return dependencies.reduce((dependency, { license }) => {
+    if (dependency.includes(license)) return dependency;
+    return [...dependency, license];
   }, []);
 };
 
-const getLicensesFilter = (licenceType, licensesList) =>
-  licensesList.filter(({ license }) => license === licenceType);
+const getLicensesFilter = (licenceType, dependencies) =>
+  dependencies.filter(({ license }) => license === licenceType);
 
 const getLicenseByType = (licenseType) => {
   const URL = "https://api.github.com/licenses/" + licenseType.toLowerCase();
@@ -56,6 +57,44 @@ const getDependenciesWithPermissions = async (dependencies) => {
   }));
 };
 
+const extractKeyListOf = (dependencies, keys) => {
+  return keys.map((key) => {
+    return Array.from(
+      new Set(
+        dependencies.reduce((acc, dependency) => {
+          if (!dependency[key]) return acc;
+          return [...acc, ...dependency[key]];
+        }, [])
+      )
+    );
+  });
+};
+
+const mapKeySet = (setKey, keys, addKey) => {
+  return setKey?.reduce(
+    (acc, key) => ({
+      ...acc,
+      [converter.toCamelCase(key) + converter.capitalize(addKey)]: new Set(
+        keys
+      ).has(key),
+    }),
+    {}
+  );
+};
+
+const mapArrayValeusOf = (key, dependencies) => {
+  const [allValues] = extractKeyListOf(dependencies, [key]);
+
+  dependencies.forEach((dependency, index) => {
+    const keyArrValue = dependency[key];
+    delete dependency[key];
+    dependencies[index] = {
+      ...dependency,
+      ...mapKeySet(allValues, keyArrValue, key),
+    };
+  });
+};
+
 module.exports = {
   getDependenciesWithPermissions,
   getAndMapLicensesByType,
@@ -63,4 +102,5 @@ module.exports = {
   getLicensesTypesIn,
   getLicensesFilter,
   getLicenseByType,
+  mapArrayValeusOf,
 };
