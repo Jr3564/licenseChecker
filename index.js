@@ -13,8 +13,8 @@ prompts.typeFilePathToReadingPrompt(["json", "csv"], async (filePath) => {
   const fetchMessage =
     "(A request will be made for each license type in dependencies)";
   const choices = {
-    option_1: "List number of dependencies by license type",
-    option_2: "List dependencies by license type",
+    option_1: "Print number of dependencies by license type",
+    option_2: "Print dependencies by license type",
     option_3: "Export dependencies by license type",
     option_4:
       "Export licenses permissions, conditions and limitations." + fetchMessage,
