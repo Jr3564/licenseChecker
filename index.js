@@ -16,7 +16,8 @@ prompts.typeFilePathToReadingPrompt(["json", "csv"], async (filePath) => {
     option_1: "List number of dependencies by license type",
     option_2: "List dependencies by license type",
     option_3: "Export dependencies by license type",
-    option_4: "Get licenses and permissions." + fetchMessage,
+    option_4:
+      "Export licenses permissions, conditions and limitations." + fetchMessage,
     option_5: "Export detailed dependencies with permissions" + fetchMessage,
     option_6: "Print table of dependencies and license status" + fetchMessage,
   };

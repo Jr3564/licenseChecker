@@ -75,10 +75,3 @@ exports.choiceToSaveBooleanOptionPrompt = (callback) => {
     callback(doSave);
   });
 };
-
-/* // want to save
-prompts.typeFilePathToExportionPrompt(["json"], async (filePath) => {
-  await writer.convertAndWrite(result, filePath);
-
-  callback(`Saved in ${__dirname}/${filePath}`);
-}); */

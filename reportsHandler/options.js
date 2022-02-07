@@ -41,7 +41,15 @@ exports.option_4 = async (dependencies, callback) => {
 
   const mappedLicenses = await service.getAndMapLicensesByType(licenceTypes);
 
-  callback(mappedLicenses);
+  await prompts.choiceToSaveBooleanOptionPrompt((saveReport) => {
+    if (saveReport) {
+      prompts.typeFilePathToExportionPrompt(["json"], async (filePath) => {
+        await writer.convertAndWrite(mappedLicenses, filePath);
+
+        callback(`Saved in ${__dirname}/${filePath}`);
+      });
+    }
+  });
 };
 
 exports.option_5 = async (dependencies, callback) => {
@@ -49,10 +57,16 @@ exports.option_5 = async (dependencies, callback) => {
     dependencies
   );
 
-  prompts.typeFilePathToExportionPrompt(["json"], async (filePath) => {
+  prompts.typeFilePathToExportionPrompt(["json", "csv"], async (filePath) => {
+    if (filePath.includes(".csv")) {
+      ["permissions", "conditions", "limitations"].forEach((key) => {
+        service.mapArrayValeusOf(key, dependenciesWithLicenses);
+      });
+    }
+
     await writer.convertAndWrite(dependenciesWithLicenses, filePath);
 
-    callback(`Saved in ${__dirname}/${filePath}`);
+    console.log(`Saved in ${__dirname}/${filePath}`);
   });
 };
 
@@ -61,12 +75,10 @@ exports.option_6 = async (dependencies, callback) => {
     dependencies
   );
 
-  //
   ["permissions", "conditions", "limitations"].forEach((key) => {
     service.mapArrayValeusOf(key, dependenciesWithLicenses);
   });
 
-  // logic made for print only
   const dependenciesWithLicensesToPrint = dependenciesWithLicenses.map(
     (dependency) => ({
       name: dependency["name"],
@@ -79,14 +91,4 @@ exports.option_6 = async (dependencies, callback) => {
   );
 
   callback(dependenciesWithLicensesToPrint);
-
-  prompts.choiceToSaveBooleanOptionPrompt((saveReport) => {
-    if (saveReport) {
-      prompts.typeFilePathToExportionPrompt(["csv"], async (filePath) => {
-        await writer.convertAndWrite(dependenciesWithLicenses, filePath);
-
-        console.log(`Saved in ${__dirname}/${filePath}`);
-      });
-    }
-  });
 };
