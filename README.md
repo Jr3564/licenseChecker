@@ -50,7 +50,7 @@ And add the file path with the extension, without quotes.
   - Export licenses and their permissions to a csv or json file.
 - Export detailed dependencies with permissions(A request will be made for each license type in dependencies):
   - Export dependencies with license conditions, permissions and limitations to a csv or json file.
--  Print table of dependencies and license status(A request will be made for each license type in dependencies):
+- Print table of dependencies and license status(A request will be made for each license type in dependencies):
   - Print a table with dependency permissions.
 
 
