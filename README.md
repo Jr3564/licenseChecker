@@ -38,7 +38,24 @@ And add the file path with the extension, without quotes.
 
 
 
-### To do:
+#### Functionalities
+
+- Print number of dependencies by license type
+  - Prints the number of licenses per type contained in the file.
+- Print dependencies by license type:
+  - Prints licenses filtered by type.
+- Export dependencies by license type
+  - Export dependencies filtered by type  to a csv or json file..
+- Export licenses permissions, conditions and limitations.(A request will be made for each license type in dependencies):
+  - Export licenses and their permissions to a csv or json file.
+- Export detailed dependencies with permissions(A request will be made for each license type in dependencies):
+  - Export dependencies with license conditions, permissions and limitations to a csv or json file.
+-  Print table of dependencies and license status(A request will be made for each license type in dependencies):
+  - Print a table with dependency permissions.
+
+
+
+#### To do:
 
 - [x] Read CSV functionality.
 
@@ -51,5 +68,9 @@ And add the file path with the extension, without quotes.
 - [ ] Find another library ready to convert CSV values
 
 - [ ] Pass code to typescript to apply OOP
+
+- [ ] Create license scrape engine
+
+- [ ] Create license cash.
 
   
