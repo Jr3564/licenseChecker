@@ -58,19 +58,11 @@ And add the file path with the extension, without quotes.
 #### To do:
 
 - [x] Read CSV functionality.
-
 - [x] Read JSON functionality.
-
 - [x] Write analysis result in CSV .
-
 - [x] Write analysis result in JSON .
-
 - [ ] Find another library ready to convert CSV values
-
 - [ ] Pass code to typescript to apply OOP
-
+- [ ] Use Strategy design pattern to improve read and write scalability
 - [ ] Create license scrape engine
-
 - [ ] Create license cash.
-
-  
