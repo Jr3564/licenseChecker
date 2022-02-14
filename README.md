@@ -61,13 +61,10 @@ And add the file path with the extension, without quotes.
 - [x] Read JSON functionality.
 - [x] Write analysis result in CSV .
 - [x] Write analysis result in JSON .
+- [x] Create license scrape engine
+- [ ] Add functionality so that you don't have to type package.json.
+        It should assume that the package.json is in the given path.
 - [ ] Find another library ready to convert CSV values
 - [ ] Pass code to typescript to apply OOP
 - [ ] Use Strategy design pattern to improve read and write scalability
-- [ ] Create license scrape engine
 - [ ] Create license cash.
-<<<<<<< HEAD
-=======
-
-  
->>>>>>> 70c4011c818b0e888a12063bb76ff1f7063359fe
