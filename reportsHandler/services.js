@@ -1,8 +1,9 @@
 const axios = require("axios");
 const converter = require("../fileHandler/converter");
-const getLicensesAmountIn = (dependencies) => {
+
+const getLicensesAmountIn = (dependencies=[]) => {
   return dependencies.reduce((dependency, { license }) => {
-    if (dependency.hasOwnProperty(license)) {
+    if (dependency?.hasOwnProperty(license)) {
       dependency[license] += 1;
     } else {
       dependency[license] = 1;
@@ -11,9 +12,9 @@ const getLicensesAmountIn = (dependencies) => {
   }, {});
 };
 
-const getLicensesTypesIn = (dependencies) => {
+const getLicensesTypesIn = (dependencies=[]) => {
   return dependencies.reduce((dependency, { license }) => {
-    if (dependency.includes(license)) return dependency;
+    if (dependency?.includes(license)) return dependency;
     return [...dependency, license];
   }, []);
 };
@@ -28,7 +29,7 @@ const getLicenseByType = (licenseType) => {
   });
 };
 
-const getAndMapLicensesByType = (licensesType) => {
+const getAndMapLicensesByType = (licensesType=[]) => {
   const requests = licensesType.map((licenseType) =>
     getLicenseByType(licenseType)
       .then(({ data }) => {
@@ -46,7 +47,7 @@ const getAndMapLicensesByType = (licensesType) => {
   );
 };
 
-const getDependenciesWithPermissions = async (dependencies) => {
+const getDependenciesWithPermissions = async (dependencies=[]) => {
   const licenceTypes = getLicensesTypesIn(dependencies);
 
   const mappedLicenses = await getAndMapLicensesByType(licenceTypes);
@@ -57,7 +58,7 @@ const getDependenciesWithPermissions = async (dependencies) => {
   }));
 };
 
-const extractKeyListOf = (dependencies, keys) => {
+const extractKeyListOf = (dependencies=[], keys) => {
   return keys.map((key) => {
     return Array.from(
       new Set(
@@ -82,7 +83,7 @@ const mapKeySet = (setKey, keys, addKey) => {
   );
 };
 
-const mapArrayValeusOf = (key, dependencies) => {
+const mapArrayValeusOf = (key, dependencies=[]) => {
   const [allValues] = extractKeyListOf(dependencies, [key]);
 
   dependencies.forEach((dependency, index) => {
