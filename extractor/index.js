@@ -51,7 +51,7 @@ const fetchAndScrapeDependencies = (dependencies) => {
 }
 
 module.exports = async () => {
-  prompts.typeManyFilePathToReadingPrompt(["json"], async (filePaths)=> {
+  prompts.typeManyFilePathToPackageJsonReadingPrompt(async (filePaths)=> {
     const dependencyList = await mapDependenciesForEachFilePath(filePaths);
     const dependencies = await fetchAndScrapeDependencies(dependencyList);
 
