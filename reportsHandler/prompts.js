@@ -76,19 +76,29 @@ exports.choiceToSaveBooleanOptionPrompt = (callback) => {
   });
 };
 
-exports.typeManyFilePathToReadingPrompt = (extensions, callback) => {
+// TODO:REPEATS
+const addPackageJsonIn = (path) => {
+  const PACKAGEJSON = 'package.json';
+  if (path.includes(PACKAGEJSON)) return path
+  return path[path.length - 1] === '/' ? `${path}${PACKAGEJSON}`: `${path}/${PACKAGEJSON}`;
+}
+
+exports.typeManyFilePathToPackageJsonReadingPrompt = (callback) => {
   const questions = [
     {
       type: "input",
       name: "filePath",
       message: "Type 'exit' to cancel.\n" + "add ',' to each file path\n" + "Analyze file ./",
-      validate: (filePath) => validToManyRead(filePath, extensions),
+      validate: validToManyRead,
       filter: (answer) => answer.trim(),
+      default: ''
     },
   ];
 
   prompt(questions).then(({ filePath }) => {
-    const filePaths = filePath.split(",").map(path => path.trim());
+    const filePaths = filePath.split(",").map(path => {
+     return addPackageJsonIn('./' + path.trim())
+    });
     callback(filePaths);
   });
 };
