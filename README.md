@@ -50,7 +50,7 @@ And add the file path with the extension, without quotes.
   - Export licenses and their permissions to a csv or json file.
 - Export detailed dependencies with permissions(A request will be made for each license type in dependencies):
   - Export dependencies with license conditions, permissions and limitations to a csv or json file.
--  Print table of dependencies and license status(A request will be made for each license type in dependencies):
+- Print table of dependencies and license status(A request will be made for each license type in dependencies):
   - Print a table with dependency permissions.
 
 
@@ -61,8 +61,10 @@ And add the file path with the extension, without quotes.
 - [x] Read JSON functionality.
 - [x] Write analysis result in CSV .
 - [x] Write analysis result in JSON .
+- [x] Create license scrape engine
+- [ ] Add functionality so that you don't have to type package.json.
+        It should assume that the package.json is in the given path.
 - [ ] Find another library ready to convert CSV values
 - [ ] Pass code to typescript to apply OOP
 - [ ] Use Strategy design pattern to improve read and write scalability
-- [ ] Create license scrape engine
 - [ ] Create license cash.

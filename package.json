@@ -13,6 +13,7 @@
   "dependencies": {
     "axios": "^0.25.0",
     "inquirer": "^8.2.0",
+    "node-html-parser": "^5.2.0",
     "package-license-extractor": "^1.0.0"
   }
 }

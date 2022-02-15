@@ -1,4 +1,4 @@
-const { validToWrite, validToRead } = require("./validations");
+const { validToWrite, validToRead, validToManyRead } = require("./validations");
 const { prompt } = require("inquirer");
 
 exports.typeLicensePrompt = (types, callback) => {
@@ -73,5 +73,22 @@ exports.choiceToSaveBooleanOptionPrompt = (callback) => {
 
   prompt(questions).then(({ doSave }) => {
     callback(doSave);
+  });
+};
+
+exports.typeManyFilePathToReadingPrompt = (extensions, callback) => {
+  const questions = [
+    {
+      type: "input",
+      name: "filePath",
+      message: "Type 'exit' to cancel.\n" + "add ',' to each file path\n" + "Analyze file ./",
+      validate: (filePath) => validToManyRead(filePath, extensions),
+      filter: (answer) => answer.trim(),
+    },
+  ];
+
+  prompt(questions).then(({ filePath }) => {
+    const filePaths = filePath.split(",").map(path => path.trim());
+    callback(filePaths);
   });
 };

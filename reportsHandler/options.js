@@ -28,7 +28,7 @@ exports.option_3 = (dependencies, callback) => {
       dependencies
     );
 
-    prompts.typeFilePathToExportionPrompt(["json"], async (filePath) => {
+    prompts.typeFilePathToExportionPrompt(["json", "csv"], async (filePath) => {
       await writer.convertAndWrite(filtredDependencies, filePath);
 
       callback(`Saved in ${__dirname}/${filePath}`);
